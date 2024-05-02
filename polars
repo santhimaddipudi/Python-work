@@ -1,0 +1,120 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPc0ODba4uArAhvR9wlWSgu",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/santhimaddipudi/Python-work/blob/master/polars\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "id": "zvqjz7MuolFx"
+      },
+      "outputs": [],
+      "source": [
+        "import polars as pl\n",
+        "import numpy as np"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "num_rows = 5000\n",
+        "rng = np.random.default_rng(seed=7)\n",
+        "buildings_data = {\"sqft\": rng.exponential(scale=1000, size=num_rows),\"year\": rng.integers(low=1995, high=2023, size=num_rows), \"building_type\": rng.choice([\"A\", \"B\", \"C\"], size=num_rows)}"
+      ],
+      "metadata": {
+        "id": "TTMacLIqor-E"
+      },
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "buildings = pl.DataFrame(buildings_data)\n",
+        "buildings"
+      ],
+      "metadata": {
+        "id": "q-Wu-1rIpBnv"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "after_2015 = buildings.filter(pl.col(\"year\") > 2015)\n",
+        "after_2015\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 882
+        },
+        "id": "HyuU_wV3pjn5",
+        "outputId": "25a0dbfb-9df3-40c8-e7bf-42ab86ce3c86"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "shape: (1_230, 3)\n",
+              "┌─────────────┬──────┬───────────────┐\n",
+              "│ sqft        ┆ year ┆ building_type │\n",
+              "│ ---         ┆ ---  ┆ ---           │\n",
+              "│ f64         ┆ i64  ┆ str           │\n",
+              "╞═════════════╪══════╪═══════════════╡\n",
+              "│ 1025.203348 ┆ 2020 ┆ C             │\n",
+              "│ 3383.637351 ┆ 2018 ┆ B             │\n",
+              "│ 575.332756  ┆ 2021 ┆ A             │\n",
+              "│ 541.135894  ┆ 2017 ┆ A             │\n",
+              "│ …           ┆ …    ┆ …             │\n",
+              "│ 1722.493329 ┆ 2018 ┆ C             │\n",
+              "│ 2468.151508 ┆ 2022 ┆ B             │\n",
+              "│ 57.562059   ┆ 2019 ┆ C             │\n",
+              "│ 3728.088949 ┆ 2020 ┆ C             │\n",
+              "└─────────────┴──────┴───────────────┘"
+            ],
+            "text/html": [
+              "<div><style>\n",
+              ".dataframe > thead > tr,\n",
+              ".dataframe > tbody > tr {\n",
+              "  text-align: right;\n",
+              "  white-space: pre-wrap;\n",
+              "}\n",
+              "</style>\n",
+              "<small>shape: (1_230, 3)</small><table border=\"1\" class=\"dataframe\"><thead><tr><th>sqft</th><th>year</th><th>building_type</th></tr><tr><td>f64</td><td>i64</td><td>str</td></tr></thead><tbody><tr><td>1025.203348</td><td>2020</td><td>&quot;C&quot;</td></tr><tr><td>3383.637351</td><td>2018</td><td>&quot;B&quot;</td></tr><tr><td>575.332756</td><td>2021</td><td>&quot;A&quot;</td></tr><tr><td>541.135894</td><td>2017</td><td>&quot;A&quot;</td></tr><tr><td>735.857274</td><td>2021</td><td>&quot;A&quot;</td></tr><tr><td>60.046343</td><td>2017</td><td>&quot;C&quot;</td></tr><tr><td>2195.964802</td><td>2017</td><td>&quot;C&quot;</td></tr><tr><td>250.345347</td><td>2018</td><td>&quot;C&quot;</td></tr><tr><td>3795.412485</td><td>2019</td><td>&quot;B&quot;</td></tr><tr><td>1748.099214</td><td>2021</td><td>&quot;A&quot;</td></tr><tr><td>144.946517</td><td>2018</td><td>&quot;B&quot;</td></tr><tr><td>302.553827</td><td>2018</td><td>&quot;C&quot;</td></tr><tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr><tr><td>506.115276</td><td>2021</td><td>&quot;C&quot;</td></tr><tr><td>58.079191</td><td>2018</td><td>&quot;C&quot;</td></tr><tr><td>429.257142</td><td>2020</td><td>&quot;C&quot;</td></tr><tr><td>447.423351</td><td>2020</td><td>&quot;B&quot;</td></tr><tr><td>300.07268</td><td>2022</td><td>&quot;A&quot;</td></tr><tr><td>563.562963</td><td>2018</td><td>&quot;A&quot;</td></tr><tr><td>2158.685557</td><td>2016</td><td>&quot;A&quot;</td></tr><tr><td>318.872944</td><td>2020</td><td>&quot;B&quot;</td></tr><tr><td>1722.493329</td><td>2018</td><td>&quot;C&quot;</td></tr><tr><td>2468.151508</td><td>2022</td><td>&quot;B&quot;</td></tr><tr><td>57.562059</td><td>2019</td><td>&quot;C&quot;</td></tr><tr><td>3728.088949</td><td>2020</td><td>&quot;C&quot;</td></tr></tbody></table></div>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ]
+    }
+  ]
+}
